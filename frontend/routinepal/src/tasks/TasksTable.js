@@ -5,7 +5,7 @@ import TaskTableRow from './TaskTableRow'
 const TasksTable = ({tasks, addTask, updateTask, deleteTask}) => {
 
     return (
-        <table>
+        <table className="TaskTable">
             <thead>
                 <tr>
                 <th>Id</th>

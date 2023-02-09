@@ -46,6 +46,7 @@ function App() {
   }, []);
 
   return (
+  <div className="wrapper">
     <div className="AppContainer">
 
       <div className="Column2">
@@ -57,6 +58,8 @@ function App() {
         </TasksTable>
       </div>
     </div>
+  </div>
+
 
   );
 }

@@ -8,14 +8,14 @@ import React, { useState } from 'react';
 const WeekTable = (props) => {
     const startTime = 8;
     const endTime = 24;
-    const timeDivision = 1;
+    const timeDivision = 0.5;
 
     const [matrix, setMatrix] = useState(createMatrix());
 
     // this function is temporary, matrix creation should run on server side.
     function createMatrix() {
         const defaultValue = 43;
-        const rows = (endTime - startTime) * timeDivision;
+        const rows = (endTime - startTime) * (timeDivision+1);
         const cols = 7;
 
         var matrix = [];
@@ -54,7 +54,7 @@ const WeekTable = (props) => {
     // we also handle a drop, cause task must be dragged to the view.
 
     return (
-        <table>
+        <table className="WeekTable">
             <tbody>
                 {matrix.map((row, i) => (
                     <tr key={i}>
