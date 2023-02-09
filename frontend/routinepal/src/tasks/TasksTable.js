@@ -10,8 +10,6 @@ const TasksTable = ({tasks, addTask, updateTask, deleteTask}) => {
                 <tr>
                 <th>Id</th>
                 <th>Nombre</th>
-                <th>Duración</th>
-                <th>Repetición</th>
                 <th>Color</th>
                 <th colSpan="2">Opciones</th>
                 </tr>

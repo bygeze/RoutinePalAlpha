@@ -1,9 +1,10 @@
 //import logo from './logo.svg';
-//import './App.css';
+import './App.css';
 import { useEffect, useState } from "react";
 import Storage from "./storage/Storage";
 import TasksTable from './tasks/TasksTable'
 import WeekTable from './weekvisualizer/WeekTable'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -45,12 +46,16 @@ function App() {
   }, []);
 
   return (
-    <div className="App"> 
-      <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask}>
+    <div className="AppContainer">
 
-      </TasksTable>
+      <div className="Column2">
+        <WeekTable tasks={tasks}></WeekTable>
+      </div>
+      <div className="Column3">
+        <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask}>
 
-      <WeekTable tasks={tasks}></WeekTable>
+        </TasksTable>
+      </div>
     </div>
 
   );

@@ -38,28 +38,6 @@ const TaskTableRow = (props) => {
         <td>
           {edit ? (
             <input
-              type="text"
-              value={task.duration}
-              onChange={(e) => setTask({ ...task, duration: e.target.value })}
-            />
-          ) : (
-            task.duration
-          )}
-        </td>
-        <td>
-          {edit ? (
-            <input
-              type="text"
-              value={task.repetition}
-              onChange={(e) => setTask({ ...task, repetition: e.target.value })}
-            />
-          ) : (
-            task.repetition
-          )}
-        </td>
-        <td>
-          {edit ? (
-            <input
               type="color"
               value={task.color}
               onChange={(e) => setTask({ ...task, color: e.target.value })}
@@ -67,16 +45,6 @@ const TaskTableRow = (props) => {
           ) : (
             task.color
           )}
-        </td>
-        <td>
-          {edit ? (
-            <button onClick={handleSave}>Save</button>
-          ) : (
-            <button onClick={handleEdit}>Edit</button>
-          )}
-        </td>
-        <td>
-          <button onClick={handleDelete}>Delete</button>
         </td>
         <td>
             <button 
@@ -88,9 +56,20 @@ const TaskTableRow = (props) => {
                 console.log("Drag ended");
                 }}
             >
-                Drag Me
+                Drag
             </button>
         </td>
+        <td>
+          {edit ? (
+            <button onClick={handleSave}>Save</button>
+          ) : (
+            <button onClick={handleEdit}>Edit</button>
+          )}
+        </td>
+        <td>
+          <button onClick={handleDelete}>Delete</button>
+        </td>
+
       </tr>
     );
 

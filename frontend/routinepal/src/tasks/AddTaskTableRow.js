@@ -16,6 +16,8 @@ const AddTaskTableRow = ({addTask}) => {
             <input
                 type="text"
                 placeholder="?"
+                size="1"
+                disabled="disabled"
                 />
             </td>
             <td>
@@ -24,22 +26,7 @@ const AddTaskTableRow = ({addTask}) => {
                 value={task.name}
                 onChange={(e) => setTask({ ...task, name: e.target.value })}
                 placeholder="Name"
-                />
-            </td>
-            <td>
-                <input
-                type="number"
-                value={task.duration}
-                onChange={(e) => setTask({ ...task, duration: e.target.value })}
-                placeholder="Duration"
-                />
-            </td>
-            <td>
-                <input
-                type="number"
-                value={task.repetition}     
-                onChange={(e) => setTask({ ...task, repetition: e.target.value })}
-                placeholder="Repetition"
+                size="12"
                 />
             </td>
             <td>
@@ -47,6 +34,7 @@ const AddTaskTableRow = ({addTask}) => {
                 type="color"
                 value={task.color}
                 onChange={(e) => setTask({ ...task, color: e.target.value })}
+                size="12"
                 />
             </td>
             <td colSpan="2"><button type="submit" onClick={handleSubmit}>Submit</button></td>

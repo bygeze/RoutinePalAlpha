@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 
-const WeekTable = ({ tasks }) => {
+/*
+ * This class is meant to display a week table
+ *   - configurable: quantity of rows depend on the start time of the day, the end time of the day and the division choosed.
+*/
+
+const WeekTable = (props) => {
     const startTime = 8;
     const endTime = 24;
     const timeDivision = 1;
 
     const [matrix, setMatrix] = useState(createMatrix());
 
+    // this function is temporary, matrix creation should run on server side.
     function createMatrix() {
-        const defaultValue = 0;
+        const defaultValue = 43;
         const rows = (endTime - startTime) * timeDivision;
         const cols = 7;
 
@@ -20,48 +26,57 @@ const WeekTable = ({ tasks }) => {
             matrix.push(row);
         }
 
-
-
         return matrix;
     }
 
-  function handleInputChange(event, rowIndex, colIndex) {
-    // En este método, puedes actualizar el estado del input y cambiar el background-color
-    // de acuerdo al id de la tarea correspondiente
-    setMatrix(prevMatrix => {
-        const newMatrix = [...prevMatrix];
-        newMatrix[rowIndex][colIndex] = parseInt(event.target.value);
+    // change state (and later save the matrix to db)
+    const handleDropChange = (event, rowIndex, colIndex) => {
+        setMatrix(prevMatrix => {
+          const newMatrix = [...prevMatrix];
+          newMatrix[rowIndex][colIndex] = parseInt(event.dataTransfer.getData("text/plain"));
+          return newMatrix;
+        });
+      };
+    
+    // tasks are sended via props so we can access them to find the task that matches the id in the matrix
+    // we use it when rendering to find name and color.
+    const findTaskById = (id) => {
+        return props.tasks.find(task => task.id == id);
+    }
 
-        return newMatrix;
-        
-      });
-  }
+    const getRowTime = (i) => {
+        return (startTime + i) + " - " + (startTime + i + timeDivision);
+    }
 
-  return (
-    <table>
-      {matrix.map((row, i) => (
-        <tr key={i}>
-          {row.map((col, j) => (
-            <td key={j}>
-              <input
-                type="number"
-                value={col}
-                onChange={event => handleInputChange(event, i, j)}
-                onDrop={(e) => {
-                    const taskId = e.dataTransfer.getData("text/plain");
-                    e.target.value = taskId;
-                    console.log(`Task id: ${taskId} dropped`);
-                    handleInputChange(e, i, j);
-                  }}
-                onDragOver={(e) => e.preventDefault()}
-                style={{ backgroundColor: col === 0 ? 'gray' : tasks.find(task => task.id === col)?.color }}
-              />
-            </td>
-          ))}
-        </tr>
-      ))}
-    </table>
-  );
+    // matrix is mapped into a table.
+    // we use getrowtime to get the time to display in the first col of the
+    // then we iterate throug the cols in the matrix selected row
+    // we also handle a drop, cause task must be dragged to the view.
+
+    return (
+        <table>
+            <tbody>
+                {matrix.map((row, i) => (
+                    <tr key={i}>
+                        <td>{getRowTime(i)}</td>
+                    {row.map((col, j) => (
+                        <td key={j}
+                        style={{ backgroundColor: col === 0 ? 'gray' : findTaskById(col)?.color }} >
+                            <div
+                                onDrop={(e) => {
+                                    handleDropChange(e, i, j);
+                                }}
+                                onDragOver={(e) => e.preventDefault()}
+                            >
+                            {findTaskById(col)?.name}
+                            </div>
+                        </td>
+                    ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
 };
 
 export default WeekTable;
