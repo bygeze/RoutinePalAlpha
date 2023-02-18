@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [matrix, setMatrix] = useState([]);
 
   const addTask = (task) => {
     
@@ -29,16 +30,31 @@ function App() {
     setTasks(updatedTasks);
   }
 
+  const fetchMatrix = () => {
+    let matrix = Storage.fetchMatrix();
+    
+    return matrix;
+  }
+
+  const updateMatrix = (m) => {
+    Storage.updateMatrix(m);
+    setMatrix(fetchMatrix());
+  }
+
   useEffect(() => {
     if( Storage.init() ) {
       console.info("LocalStorage is working just fine.");
       let fetchedTasks = Storage.fetchAllTasks();
+      let fetchedMatrix = fetchMatrix();
 
       if(Array.isArray(fetchedTasks)) {
         setTasks(fetchedTasks);
       } else {
         console.error("Error fetching tasks." + fetchedTasks);
       }
+
+      // if to detect load is correct needs to be developed
+      setMatrix(fetchedMatrix);
     } else {
       console.error("LocalStorage is not working");
     }
@@ -48,9 +64,11 @@ function App() {
   return (
   <div className="wrapper">
     <div className="AppContainer">
-
+      <div className="Column1">
+        
+      </div>
       <div className="Column2">
-        <WeekTable tasks={tasks}></WeekTable>
+        <WeekTable tasks={tasks} matrix={matrix} updateMatrix={updateMatrix}></WeekTable>
       </div>
       <div className="Column3">
         <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask}>

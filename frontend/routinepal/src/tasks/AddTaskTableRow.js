@@ -12,22 +12,35 @@ const AddTaskTableRow = ({addTask}) => {
     
     return (
         <tr>
-            <td>
-            <input
-                type="text"
-                placeholder="?"
-                size="1"
-                disabled="disabled"
-                />
-            </td>
-            <td>
+            <td colSpan="5">
+            <div class="input-group mb-3">
                 <input
-                type="text"
-                value={task.name}
-                onChange={(e) => setTask({ ...task, name: e.target.value })}
-                placeholder="Name"
-                size="12"
+                    class="form-control"
+                    type="text"
+                    value={task.name}
+                    onChange={(e) => setTask({ ...task, name: e.target.value })}
+                    placeholder="Name"
+                    />
+                <input
+                    class="form-control taskColorInput"
+                    type="color"
+                    value={task.color}
+                    onChange={(e) => setTask({ ...task, color: e.target.value })}
                 />
+                <button class="form-control btn btn-primary submitTaskButton "type="submit" onClick={handleSubmit}>Submit</button>
+            </div>
+
+            </td>
+        </tr>
+    );
+}
+        
+    
+export default AddTaskTableRow;
+
+/*
+            <td colSpan="3"> 
+
             </td>
             <td>
                 <input
@@ -37,10 +50,5 @@ const AddTaskTableRow = ({addTask}) => {
                 size="12"
                 />
             </td>
-            <td colSpan="2"><button type="submit" onClick={handleSubmit}>Submit</button></td>
-        </tr>
-    );
-}
-        
-    
-export default AddTaskTableRow;
+
+*/

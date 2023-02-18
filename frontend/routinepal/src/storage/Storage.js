@@ -10,22 +10,55 @@ class Storage {
             return false;
         }
           
-        // checks if tasks array exists, if it doesn't, creates it.
         let tasks = localStorage.getItem('tasks');
-        if (tasks === undefined) {
+        
+        if (tasks === undefined || tasks === "undefined" || tasks === null)  {
+            // checks if tasks array exists, if it doesn't, creates it.
+
+
             localStorage.setItem('tasks', JSON.stringify([]));
+                       
         }
 
-        // checks if  id counter exists, if it doesn't, creates it.
         let idGenerator = localStorage.getItem('idCounter');
-        if (idGenerator === undefined) {
+
+        if (idGenerator === undefined || idGenerator === "undefined" || idGenerator === null) {
+
+            // checks if  id counter exists, if it doesn't, creates it.
+
             localStorage.setItem("idCounter", 0);
         }
+
+        let matrixStorage = localStorage.getItem("matrix");
+
+        if(matrixStorage === undefined || matrixStorage === "undefined" || matrixStorage === null) {
+            localStorage.setItem("matrix", JSON.stringify(this.createMatrix()));
+        }
+            // this function is temporary, matrix creation should run on server side.
 
         // here should be
         // checks if matrix exists, if it doesn't, creates it.
         
         return true;
+    }
+
+    static createMatrix = () => {
+        const startTime = 8;
+        const endTime = 24;
+        const timeDivision = 0.5;
+
+        const defaultValue = 1;
+        const rows = (endTime - startTime) / (timeDivision);
+        const cols = 7;
+
+        var matrix = [];
+
+        for(let i = 0; i < rows; i++) {
+            let row = Array(7).fill(defaultValue);
+            matrix.push(row);
+        }
+
+        return matrix;
     }
 
     // (C) save tasks method  
@@ -60,6 +93,18 @@ class Storage {
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }
 
+    // MATRIX CRUD´
+    // (C) 
+    static fetchMatrix() {
+        let matrix = JSON.parse(localStorage.getItem("matrix"));
+
+        return matrix;
+    }
+
+    static updateMatrix(m) {
+        localStorage.setItem("matrix", JSON.stringify(m));
+    }
+
 }
 
 function generateId() {
@@ -67,5 +112,6 @@ function generateId() {
     localStorage.setItem("idCounter", id);
     return id;
 }
+
 
 export default Storage;

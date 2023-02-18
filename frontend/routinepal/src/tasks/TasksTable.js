@@ -5,24 +5,23 @@ import TaskTableRow from './TaskTableRow'
 const TasksTable = ({tasks, addTask, updateTask, deleteTask}) => {
 
     return (
-        <table className="TaskTable">
-            <thead>
-                <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Color</th>
-                <th colSpan="2">Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <AddTaskTableRow addTask={addTask} />
-                {tasks.map(task => (
-                    <TaskTableRow key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} />
-                    
-                ))}
-            </tbody>
-            
-        </table>
+        <div>
+            <h1>Tasklist</h1>
+            <table className="TaskTable">
+
+                <h5>Add a new task:</h5>
+                <tbody>
+                    <AddTaskTableRow addTask={addTask} />
+                    <br />
+                    <h5>Your tasks:</h5>
+                    {tasks.map(task => (
+                        <TaskTableRow key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} />
+                        
+                    ))}
+                </tbody> 
+            </table>
+        </div>
+
     );
 
 }

@@ -40,18 +40,29 @@ html, body, #root, .wrapper {
 
 
 
-
+/* task list column */
 .Column3 {
-  width: 500px;
+  width: 450px;
   height: 100%;
-  background-color: rgb(179, 62, 62);
-
+  background-color: #dfe4ea;
+  padding: 0.8rem;  
 }
+
+.taskColorInput {
+  height: 40px;
+  max-width: 80px; 
+}
+
+.submitTaskButton {
+  max-width: 80px;
+}
+
+
 
 .Column3 table {
   width: 100%;
 
-}
+} 
 
 .ToggleButton {
   position: absolute;

@@ -22,9 +22,6 @@ const TaskTableRow = (props) => {
     return (
       <tr>
         <td>
-            {task.id}
-        </td>
-        <td>
           {edit ? (
             <input
               type="text"
