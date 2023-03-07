@@ -9,6 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   const [tasks, setTasks] = useState([]);
   const [matrix, setMatrix] = useState([]);
+  const [brush, setBrush] = useState({name: ""});
+  const [isPainting, setIsPainting] = useState(false);
 
   const addTask = (task) => {
     
@@ -68,10 +70,11 @@ function App() {
         
       </div>
       <div className="Column2">
-        <WeekTable tasks={tasks} matrix={matrix} updateMatrix={updateMatrix}></WeekTable>
+        <WeekTable tasks={tasks} matrix={matrix} updateMatrix={updateMatrix} brush={brush} isPainting={isPainting} setIsPainting={setIsPainting
+        }></WeekTable>
       </div>
       <div className="Column3">
-        <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask}>
+        <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask} brush={brush} setBrush={setBrush}  >
 
         </TasksTable>
       </div>

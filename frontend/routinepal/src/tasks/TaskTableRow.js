@@ -18,6 +18,12 @@ const TaskTableRow = (props) => {
     const handleDelete = () => {
         props.deleteTask(task);
     }
+
+    const toggleBrush = (id) => {
+      // setBrush
+      let brush = task;
+      props.setBrush(brush);
+    }
   
     return (
       <tr>
@@ -57,6 +63,9 @@ const TaskTableRow = (props) => {
             </button>
         </td>
         <td>
+          <button onClick={toggleBrush}>Brush</button>
+        </td>
+        <td>
           {edit ? (
             <button onClick={handleSave}>Save</button>
           ) : (
@@ -66,6 +75,7 @@ const TaskTableRow = (props) => {
         <td>
           <button onClick={handleDelete}>Delete</button>
         </td>
+
 
       </tr>
     );

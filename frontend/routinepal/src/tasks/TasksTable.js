@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import AddTaskTableRow from './AddTaskTableRow'
 import TaskTableRow from './TaskTableRow'
 
-const TasksTable = ({tasks, addTask, updateTask, deleteTask}) => {
+const TasksTable = ({tasks, addTask, updateTask, deleteTask, brush, setBrush}) => {
 
     return (
         <div>
@@ -13,9 +13,11 @@ const TasksTable = ({tasks, addTask, updateTask, deleteTask}) => {
                 <tbody>
                     <AddTaskTableRow addTask={addTask} />
                     <br />
+                    Brush: {brush.name}
+                    <br />
                     <h5>Your tasks:</h5>
                     {tasks.map(task => (
-                        <TaskTableRow key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} />
+                        <TaskTableRow key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} setBrush={setBrush}/>
                         
                     ))}
                 </tbody> 
