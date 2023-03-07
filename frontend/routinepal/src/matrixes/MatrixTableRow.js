@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const MatrixTableRow = ({scheduleName}) => {
+const MatrixTableRow = ({scheduleName, scheduleId, currentScheduleId, changeCurrentSchedule}) => {
     return (
         <div>
             <div className="input-group mb-3">
@@ -9,7 +9,17 @@ const MatrixTableRow = ({scheduleName}) => {
                     type="text"
                     placeholder={scheduleName}
                     />
-                <button className="form-control btn btn-primary submitTaskButton" type="submit" >Select</button>
+                {
+                    scheduleId == currentScheduleId ? (
+                        <button className="form-control btn btn-success submitTaskButton" type="submit" >Selected</button>
+                    ) : (
+                        <button 
+                        className="form-control btn btn-primary submitTaskButton" 
+
+                        onClick={changeCurrentSchedule.bind(this, scheduleId)}
+                        type="submit" >Select</button>
+                    )
+                }
             </div>       
         </div>
     );

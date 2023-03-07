@@ -5,7 +5,7 @@ import React from 'react';
  *   - configurable: quantity of rows depend on the start time of the day, the end time of the day and the division choosed.
 */
 
-const WeekTable = ({tasks, matrix, updateMatrix, brush, isPainting, setIsPainting}) => {
+const WeekTable = ({tasks, currentSchedule, updateSchedule, brush, isPainting, setIsPainting}) => {
     const startTime = "08:00";
     const endTime = "02:00";
     const timeDivision = 30; // en minutos
@@ -44,22 +44,22 @@ const WeekTable = ({tasks, matrix, updateMatrix, brush, isPainting, setIsPaintin
 
     // change state (and later save the matrix to db)
     const handleDropChange = (event, rowIndex, colIndex) => {
-        const newMatrix = matrix;
+        const newMatrix = currentSchedule.matrix;
 
         newMatrix[rowIndex][colIndex] = parseInt(event.dataTransfer.getData("text/plain"));
         
         console.log(newMatrix);
-        console.log(updateMatrix(newMatrix));
+        console.log(updateSchedule(currentSchedule));
       };
 
     // change state (and later save the matrix to db)
     const handleItemChange = (id, rowIndex, colIndex) => {
 
-        const newMatrix = matrix;
+        const newMatrix = currentSchedule.matrix;
 
         newMatrix[rowIndex][colIndex] = id;
         
-        updateMatrix(newMatrix)
+        updateSchedule(currentSchedule)
 
       };
     
@@ -96,8 +96,10 @@ const WeekTable = ({tasks, matrix, updateMatrix, brush, isPainting, setIsPaintin
     return (
         <table className="WeekTable noselect">
             <tbody>
+
                 <tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td><td>Saturday</td><td>Sunday</td></tr>
-                {matrix.map((row, i) => (
+                
+                {currentSchedule.matrix.map((row, i) => (
                     <tr key={i}>
                         <td style={{width: "13%"}}>{getRowTime(i)}</td>
                     {row.map((col, j) => (

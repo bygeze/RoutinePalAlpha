@@ -12,6 +12,11 @@ function App() {
   const [matrix, setMatrix] = useState([]);
   const [brush, setBrush] = useState({name: ""});
   const [isPainting, setIsPainting] = useState(false);
+
+  const [isLoading, setLoading] = useState(true);
+  
+  
+  const [currentSchedule, setCurrentSchedule] = useState([]);
   const [allSchedules, setAllSchedules] = useState([]);
 
   const addTask = (task) => {
@@ -36,8 +41,12 @@ function App() {
 
   const fetchMatrix = () => {
     let matrix = Storage.fetchMatrix();
-    
     return matrix;
+  }
+
+  const fetchSchedules = () => {
+    let schedules = Storage.fetchSchedules();
+    return schedules;
   }
 
   const updateMatrix = (m) => {
@@ -45,18 +54,21 @@ function App() {
     setMatrix(fetchMatrix());
   }
 
+  const updateSchedule = (sch) => {
+    Storage.updateSchedule(sch);
+  }
+
+  const changeCurrentSchedule = (id) => {
+    setCurrentSchedule(allSchedules.find(s => s.id == id));
+  }
+
   useEffect(() => {
     if( Storage.init() ) {
       console.info("LocalStorage is working just fine.");
 
       // setTest Task
-      Storage.saveTask({ name: "", duration: 0, repetition: 1, color: "#FAFAFA" })
-      Storage.saveTask({ name: "default", duration: 0, repetition: 1, color: "#EAFB21" })
 
       let fetchedTasks = Storage.fetchAllTasks();
-      let fetchedMatrix = fetchMatrix();
-
-      //let fetchedSchedules = Storage.fetchSchedules();
 
       if(Array.isArray(fetchedTasks)) {
         setTasks(fetchedTasks);
@@ -64,10 +76,16 @@ function App() {
         console.error("Error fetching tasks." + fetchedTasks);
       }
 
-      // if to detect load is correct needs to be developed
-      setMatrix(fetchedMatrix);
+      let fetchedSchedules = Storage.fetchSchedules();
 
-      setAllSchedules(Storage.fetchSchedules());
+      let current = fetchedSchedules.find(elem => elem.id === 1);
+
+      setAllSchedules(fetchedSchedules);
+      setCurrentSchedule(current);
+
+
+      setLoading(false);
+
     } else {
       console.error("LocalStorage is not working");
     }
@@ -78,11 +96,17 @@ function App() {
   <div className="wrapper">
     <div className="AppContainer">
       <div className="Column1">
-        <SchedulesTable allSchedules={allSchedules}></SchedulesTable>
+      {
+          isLoading ? ("Loading") : (                <SchedulesTable allSchedules={allSchedules} currentScheduleId={currentSchedule.id} changeCurrentSchedule={changeCurrentSchedule}></SchedulesTable>)
+        }
+
       </div>
       <div className="Column2">
-        <WeekTable tasks={tasks} matrix={matrix} updateMatrix={updateMatrix} brush={brush} isPainting={isPainting} setIsPainting={setIsPainting
-        }></WeekTable>
+        {
+          isLoading ? ("Loading") : (        <WeekTable tasks={tasks} currentSchedule={currentSchedule} updateSchedule={updateSchedule} brush={brush} isPainting={isPainting} setIsPainting={setIsPainting
+          }></WeekTable>)
+        }
+
       </div>
       <div className="Column3">
         <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask} brush={brush} setBrush={setBrush}  >
@@ -97,3 +121,22 @@ function App() {
 }
 
 export default App;
+
+/*
+  <div className="wrapper">
+    <div className="AppContainer">
+      <div className="Column1">
+        <SchedulesTable allSchedules={allSchedules} currentScheduleId={currentSchedule.id}></SchedulesTable>
+      </div>
+      <div className="Column2">
+      <WeekTable tasks={tasks} currentSchedule={currentSchedule} updateMatrix={updateMatrix} brush={brush} isPainting={isPainting} setIsPainting={setIsPainting
+        }></WeekTable>
+      </div>
+      <div className="Column3">
+        <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask} brush={brush} setBrush={setBrush}  >
+
+        </TasksTable>
+      </div>
+    </div>
+  </div>
+*/
