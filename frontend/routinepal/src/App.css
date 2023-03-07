@@ -14,7 +14,7 @@ html, body, #root, .wrapper {
 }
 
 .Column1 {
-  width: 200px;
+
   height: 100%;
   background-color: lightgray;
 }
@@ -38,8 +38,6 @@ html, body, #root, .wrapper {
   
 }
 
-
-
 /* task list column */
 .Column3 {
   width: 450px;
@@ -53,16 +51,13 @@ html, body, #root, .wrapper {
   max-width: 80px; 
 }
 
-.submitTaskButton {
+.submitTaskButton, .deleteTaskButton {
   max-width: 80px;
 }
 
+/* your task styles */
 
 
-.Column3 table {
-  width: 100%;
-
-} 
 
 .ToggleButton {
   position: absolute;
@@ -80,9 +75,16 @@ html, body, #root, .wrapper {
   width: 100%;
   max-height: 100%;
   min-height: 100%;
+  table-layout: fixed;
+  height: fit-content;
 }
 
 
 .WeekTable td > div {
-  min-height: 30px;
+  height:100%;
+}
+
+.WeekTable td {
+  border-bottom: 1px solid gray;
+  word-wrap: break-word;
 }

@@ -46,6 +46,10 @@ function App() {
   useEffect(() => {
     if( Storage.init() ) {
       console.info("LocalStorage is working just fine.");
+
+      // setTest Task
+      Storage.saveTask({ name: "", duration: 0, repetition: 1, color: "#FAFAFA" })
+
       let fetchedTasks = Storage.fetchAllTasks();
       let fetchedMatrix = fetchMatrix();
 

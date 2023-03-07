@@ -12,28 +12,28 @@ class Storage {
           
         let tasks = localStorage.getItem('tasks');
         
-        if (tasks === undefined || tasks === "undefined" || tasks === null)  {
+        //if (tasks === undefined || tasks === "undefined" || tasks === null)  {
             // checks if tasks array exists, if it doesn't, creates it.
 
 
             localStorage.setItem('tasks', JSON.stringify([]));
                        
-        }
+        //}
 
         let idGenerator = localStorage.getItem('idCounter');
 
-        if (idGenerator === undefined || idGenerator === "undefined" || idGenerator === null) {
+        //if (idGenerator === undefined || idGenerator === "undefined" || idGenerator === null) {
 
             // checks if  id counter exists, if it doesn't, creates it.
 
             localStorage.setItem("idCounter", 0);
-        }
+        //}
 
         let matrixStorage = localStorage.getItem("matrix");
 
-        if(matrixStorage === undefined || matrixStorage === "undefined" || matrixStorage === null) {
+        //if(matrixStorage === undefined || matrixStorage === "undefined" || matrixStorage === null) {
             localStorage.setItem("matrix", JSON.stringify(this.createMatrix()));
-        }
+        //}
             // this function is temporary, matrix creation should run on server side.
 
         // here should be

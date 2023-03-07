@@ -12,23 +12,28 @@ const WeekTable = ({tasks, matrix, updateMatrix, brush, isPainting, setIsPaintin
 
     //const [matrix, setMatrix] = useState(createMatrix());
     const toggleBrush = (i, j) => {
-        if(brush !== "undefined") {
-            if(brush.name != "") {
-                setIsPainting(!isPainting);
-
-                if(!isPainting) { 
-                    console.log("handleChange");
-                    handleItemChange(brush.id, i, j) }
-        
-                console.log(!isPainting + " - " + brush.id + " - " + i + " - " + j);
-
-
+        if(brush != null ) {
+            if(brush !== "undefined") {
+                if(brush.name != "") {
+                    setIsPainting(!isPainting);
+    
+                    if(!isPainting) { 
+                        console.log("handleChange");
+                        handleItemChange(brush.id, i, j) }
+            
+                    console.log(!isPainting + " - " + brush.id + " - " + i + " - " + j);
+    
+    
+                } else {
+                    console.log("No brush selected");
+                }
             } else {
                 console.log("No brush selected");
             }
         } else {
             console.log("No brush selected");
         }
+
     }
 
     const whenBrushHovers = (i, j) => {
@@ -93,23 +98,24 @@ const WeekTable = ({tasks, matrix, updateMatrix, brush, isPainting, setIsPaintin
             <tbody>
                 {matrix.map((row, i) => (
                     <tr key={i}>
-                        <td>{getRowTime(i)}</td>
+                        <td style={{width: "13%"}}>{getRowTime(i)}</td>
                     {row.map((col, j) => (
-                        <td key={j}
+                        <td
+                         key={j}                                 
+                         onMouseDown={(e) => { toggleBrush(i, j);
+                            if (!e) e = window.event;
+                            e.cancelBubble = true;
+                            if (e.stopPropagation) e.stopPropagation();
+                        }}
+                        onMouseOver={(e) => whenBrushHovers(i, j)}
+                        onMouseUp={(e) => toggleBrush(i, j)}
                         style={{ backgroundColor: col === 0 ? 'gray' : findTaskById(col)?.color }} >
                             <div
                                 onDrop={(e) => {
                                     handleDropChange(e, i, j);
                                 }}
                                 onDragOver={(e) => e.preventDefault()}
-                                onMouseDown={(e) => { toggleBrush(i, j);
-                                    if (!e) e = window.event;
-                                    e.cancelBubble = true;
-                                    if (e.stopPropagation) e.stopPropagation();
-                                }}
-                                onSelect
-                                onMouseOver={(e) => whenBrushHovers(i, j)}
-                                onMouseUp={(e) => toggleBrush(i, j)}
+
                             >
                             {findTaskById(col)?.name}
                             </div>
