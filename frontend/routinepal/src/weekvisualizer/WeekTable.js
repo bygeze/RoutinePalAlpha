@@ -96,6 +96,7 @@ const WeekTable = ({tasks, matrix, updateMatrix, brush, isPainting, setIsPaintin
     return (
         <table className="WeekTable noselect">
             <tbody>
+                <tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td><td>Saturday</td><td>Sunday</td></tr>
                 {matrix.map((row, i) => (
                     <tr key={i}>
                         <td style={{width: "13%"}}>{getRowTime(i)}</td>

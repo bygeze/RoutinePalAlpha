@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Storage from "./storage/Storage";
 import TasksTable from './tasks/TasksTable'
 import WeekTable from './weekvisualizer/WeekTable'
+import SchedulesTable from './matrixes/SchedulesTable'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const [matrix, setMatrix] = useState([]);
   const [brush, setBrush] = useState({name: ""});
   const [isPainting, setIsPainting] = useState(false);
+  const [allSchedules, setAllSchedules] = useState([]);
 
   const addTask = (task) => {
     
@@ -49,9 +51,12 @@ function App() {
 
       // setTest Task
       Storage.saveTask({ name: "", duration: 0, repetition: 1, color: "#FAFAFA" })
+      Storage.saveTask({ name: "default", duration: 0, repetition: 1, color: "#EAFB21" })
 
       let fetchedTasks = Storage.fetchAllTasks();
       let fetchedMatrix = fetchMatrix();
+
+      //let fetchedSchedules = Storage.fetchSchedules();
 
       if(Array.isArray(fetchedTasks)) {
         setTasks(fetchedTasks);
@@ -61,6 +66,8 @@ function App() {
 
       // if to detect load is correct needs to be developed
       setMatrix(fetchedMatrix);
+
+      setAllSchedules(Storage.fetchSchedules());
     } else {
       console.error("LocalStorage is not working");
     }
@@ -71,7 +78,7 @@ function App() {
   <div className="wrapper">
     <div className="AppContainer">
       <div className="Column1">
-        
+        <SchedulesTable allSchedules={allSchedules}></SchedulesTable>
       </div>
       <div className="Column2">
         <WeekTable tasks={tasks} matrix={matrix} updateMatrix={updateMatrix} brush={brush} isPainting={isPainting} setIsPainting={setIsPainting
