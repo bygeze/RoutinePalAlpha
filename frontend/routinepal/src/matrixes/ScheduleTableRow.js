@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const MatrixTableRow = ({scheduleName, scheduleId, currentScheduleId, changeCurrentSchedule}) => {
+const ScheduleTableRow = ({scheduleName, scheduleId, currentScheduleId, changeCurrentSchedule}) => {
     return (
         <div>
             <div className="input-group mb-3">
@@ -25,4 +25,4 @@ const MatrixTableRow = ({scheduleName, scheduleId, currentScheduleId, changeCurr
     );
 }
 
-export default MatrixTableRow;
+export default ScheduleTableRow;

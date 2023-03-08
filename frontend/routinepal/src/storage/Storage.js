@@ -13,8 +13,8 @@ class Storage {
         }
 
         // gets tasks
-        if(!FLAG_TEST_RESET) {
-            localStorage.setItem('tasks', JSON.stringify([{ id: 1, name: "empty", duration: 0, repetition: 1, color: "#FAFAFA" }, { id: 0, name: "default", duration: 0, repetition: 1, color: "#EAFB21" }]));
+        if(FLAG_TEST_RESET) {
+            localStorage.setItem('tasks', JSON.stringify([{ id: 1, name: "empty", duration: 0, repetition: 1, color: "#FAFAFA" }, { id: 2, name: "default", duration: 0, repetition: 1, color: "#EAFB21" }]));
         } else {
             let tasks = localStorage.getItem('tasks');
             if (tasks === undefined || tasks === "undefined" || tasks === null)  {
@@ -35,7 +35,7 @@ class Storage {
         }
 
         // get schedule id counter
-        if(FLAG_TEST_RESET) {
+        if(!FLAG_TEST_RESET) {
             localStorage.setItem("scheduleIdCounter", 0);
         } else {
             let scheduleIdCounter = localStorage.getItem('scheduleIdCounter');
@@ -48,12 +48,16 @@ class Storage {
         // here should be
         // checks if matrix exists, if it doesn't, creates it.
         if(!FLAG_TEST_RESET) {
-            localStorage.setItem("schedules", JSON.stringify([this.createSchedule(), this.createSchedule()]));
+            //localStorage.setItem("schedules", JSON.stringify([this.createScheduleMatrix(), this.createScheduleMatrix()]));
+            localStorage.setItem("schedules", JSON.stringify([]));
+
+            this.createSchedule("08:00", "20:00", 30, "default");
         } else {
             let schedules = localStorage.getItem('schedules');
             if (schedules === undefined || schedules === "undefined" || schedules === null) {
                 // checks if  id counter exists, if it doesn't, creates it.
-                localStorage.setItem("schedules", JSON.stringify([this.createSchedule(), this.createSchedule()]));
+                localStorage.setItem("schedules", JSON.stringify([]));
+                this.createSchedule("08:00", "20:00", 30, "default");
             }
 
         }
@@ -62,15 +66,42 @@ class Storage {
         return true;
     }
 
-    static createSchedule = () => {
-        var schedule = {};
+    static createSchedule = (startTime, endTime, interval, name) => {
+        let schedule = {};
 
-        const startTime = 8;
-        const endTime = 24;
-        const timeDivision = 0.5;
+        schedule.name = name;
+        schedule.id = generateScheduleId();
+        schedule.matrix = this.createScheduleMatrix(this.getTimeDiff(startTime, endTime, interval));
+        schedule.startTime = startTime;
+        schedule.endTime = endTime;
+        schedule.interval = interval;
+        
+        let sch = JSON.parse(localStorage.getItem("schedules"));
+        sch.push(schedule);
+        localStorage.setItem("schedules", JSON.stringify(sch));
+    }
+
+    static getTimeDiff = (startHour, endHour, interval) => {
+        const [startH, startM] = startHour.split(":").map(Number);
+        const [endH, endM] = endHour.split(":").map(Number);
+      
+        let diff = endH * 60 + endM - (startH * 60 + startM);
+      
+        if (diff < 0) {
+          diff += 24 * 60;
+        }
+      
+        return diff / interval;
+      };
+
+    static createScheduleMatrix = (rows) => {
+        //var schedule = {};
+
+        //const startTime = startTime;
+        //const endTime = endTime;
+        //const timeDivision = 0.5;
 
         const defaultValue = 1;
-        const rows = (endTime - startTime) / (timeDivision);
         const cols = 7;
 
         var matrix = [];
@@ -80,11 +111,11 @@ class Storage {
             matrix.push(row);
         }
 
-        schedule.name = "default";
-        schedule.matrix = matrix;
-        schedule.id = parseInt(generateScheduleId());
+        //schedule.name = "default";
+        //schedule.matrix = matrix;
+        //schedule.id = parseInt(generateScheduleId());
 
-        return schedule; 
+        return matrix; 
     }
 
     // (C) save tasks method  
@@ -133,12 +164,13 @@ class Storage {
 
     static updateSchedule(sch) {
         let schedules = JSON.parse(localStorage.getItem("schedules"));
-        let index = schedules.findIndex(s => s.id === sch.id);
+        let index = schedules.findIndex(s => s.id == sch.id);
 
         if(index !== -1) {
             schedules[index] = sch;
         }
 
+        console.log("Saved in DB");
         localStorage.setItem("schedules", JSON.stringify(schedules));
     }
 

@@ -14,9 +14,10 @@ html, body, #root, .wrapper {
 }
 
 .Column1 {
-  width: 300px;
+  width: 400px;
   height: 100%;
   background-color: lightgray;
+  padding: 0.8rem;
 }
 
 .Column2 {
@@ -69,6 +70,19 @@ html, body, #root, .wrapper {
   padding: 10px 15px;
   font-size: 16px;
   cursor: pointer;
+}
+
+.WeekTableWrapper {
+  display: flex;
+
+}
+
+.WeekTableWrapper table {
+  flex: 1;
+}
+
+.WeekTableTimesColumn {
+  max-width: 100px;
 }
 
 .WeekTable {

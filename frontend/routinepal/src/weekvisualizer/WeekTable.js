@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 /*
  * This class is meant to display a week table
@@ -6,19 +6,21 @@ import React from 'react';
 */
 
 const WeekTable = ({tasks, currentSchedule, updateSchedule, brush, isPainting, setIsPainting}) => {
-    const startTime = "08:00";
-    const endTime = "02:00";
-    const timeDivision = 30; // en minutos
+    const [brushType, setBrushType] = useState(true);
+    
+    const toggleBrush = (clickType, i, j) => {
+        if(clickType == 0) {
+            setBrushType(true);
+        } else if (clickType == 2) {
+            setBrushType(false);
+        }
 
-    //const [matrix, setMatrix] = useState(createMatrix());
-    const toggleBrush = (i, j) => {
         if(brush != null ) {
             if(brush !== "undefined") {
                 if(brush.name != "") {
                     setIsPainting(!isPainting);
-    
+                    
                     if(!isPainting) { 
-                        console.log("handleChange");
                         handleItemChange(brush.id, i, j) }
             
                     console.log(!isPainting + " - " + brush.id + " - " + i + " - " + j);
@@ -33,7 +35,6 @@ const WeekTable = ({tasks, currentSchedule, updateSchedule, brush, isPainting, s
         } else {
             console.log("No brush selected");
         }
-
     }
 
     const whenBrushHovers = (i, j) => {
@@ -42,25 +43,35 @@ const WeekTable = ({tasks, currentSchedule, updateSchedule, brush, isPainting, s
         }
     }
 
+    function changeMatrixCell (val, rowIndex, colIndex) {
+        const newSchedule = {
+            ...currentSchedule,
+            matrix: [
+              ...currentSchedule.matrix.slice(0, rowIndex),
+              [
+                ...currentSchedule.matrix[rowIndex].slice(0, colIndex),
+                parseInt(val),
+                ...currentSchedule.matrix[rowIndex].slice(colIndex + 1)
+              ],
+              ...currentSchedule.matrix.slice(rowIndex + 1)
+            ]
+          };
+        
+          return newSchedule;
+    }
+    
     // change state (and later save the matrix to db)
     const handleDropChange = (event, rowIndex, colIndex) => {
-        const newMatrix = currentSchedule.matrix;
-
-        newMatrix[rowIndex][colIndex] = parseInt(event.dataTransfer.getData("text/plain"));
-        
-        console.log(newMatrix);
-        console.log(updateSchedule(currentSchedule));
+        let sch = changeMatrixCell(parseInt(event.dataTransfer.getData("text/plain")), rowIndex, colIndex);
+        updateSchedule(sch);
       };
 
     // change state (and later save the matrix to db)
     const handleItemChange = (id, rowIndex, colIndex) => {
-
-        const newMatrix = currentSchedule.matrix;
-
-        newMatrix[rowIndex][colIndex] = id;
-        
-        updateSchedule(currentSchedule)
-
+        if(!brushType) {
+            id = 1;
+        }
+        updateSchedule(changeMatrixCell(id, rowIndex, colIndex));
       };
     
     // tasks are sended via props so we can access them to find the task that matches the id in the matrix
@@ -69,22 +80,30 @@ const WeekTable = ({tasks, currentSchedule, updateSchedule, brush, isPainting, s
         return tasks.find(task => task.id == id);
     }
 
-    /*const getRowTime = (i) => {
-        return (startTime + (i / 2)) + " - " + (startTime + (i / 2) + timeDivision);
-    }*/
     function getRowTime(index) {
-        const startDate = new Date(`2022-02-07T${startTime}:00.000Z`);
-        const endDate = new Date(`2022-02-08T${endTime}:00.000Z`);
-        const timeDiff = (endDate - startDate) / 1000 / 60 / timeDivision;
+        const start_time = currentSchedule.startTime;
+        const interval = currentSchedule.interval;
       
-        const currentDate = new Date(`2022-02-07T${startTime}:00.000Z`);
-        currentDate.setMinutes(currentDate.getMinutes() + (index * timeDivision));
-        if (currentDate > endDate) {
-          const nextDate = new Date(`2022-02-08T00:00:00.000Z`);
-          nextDate.setMinutes(nextDate.getMinutes() + ((index - timeDiff) * timeDivision));
-          return `${startTime} - ${nextDate.toISOString().substr(11, 5)}`;
-        }
-        return `${currentDate.toISOString().substr(11, 5)} - ${(new Date(currentDate.setMinutes(currentDate.getMinutes() + timeDivision))).toISOString().substr(11, 5)}`;
+        // Convertimos la hora de inicio a un objeto de tipo Date
+        const [start_hour, start_min] = start_time.split(":").map(Number);
+        const start = new Date();
+        start.setHours(start_hour);
+        start.setMinutes(start_min);
+      
+        // Calculamos la hora de fin
+        const delta_min = interval * index;
+        const end_index = index + 1;
+        const delta_min_end = interval * end_index;
+        const end = new Date(start.getTime() + delta_min_end * 60000);
+      
+        // Sumamos la cantidad de minutos al objeto Date que representa la hora de inicio
+        start.setTime(start.getTime() + delta_min * 60000);
+      
+        // Formateamos las horas a string
+        const start_formatted = `${start.getHours().toString().padStart(2, "0")}:${start.getMinutes().toString().padStart(2, "0")}`;
+        const end_formatted = `${end.getHours().toString().padStart(2, "0")}:${end.getMinutes().toString().padStart(2, "0")}`;
+      
+        return `${start_formatted} - ${end_formatted}`;
       }
 
 
@@ -94,24 +113,42 @@ const WeekTable = ({tasks, currentSchedule, updateSchedule, brush, isPainting, s
     // we also handle a drop, cause task must be dragged to the view.
 
     return (
-        <table className="WeekTable noselect">
-            <tbody>
+        <div className="WeekTableWrapper">
+        <table className="WeekTableTimesColumn">
+            <thead>
+            <tr><td><p></p></td></tr>
+            </thead>
 
-                <tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td><td>Saturday</td><td>Sunday</td></tr>
-                
+            <tbody>
+            {currentSchedule.matrix.map((row, i) => (
+                <tr key={i}>
+                    <td key={i}>{getRowTime(i)}</td>
+                </tr>
+            )) }
+            </tbody>
+
+        </table>
+
+        <table className="WeekTable noselect">
+            <thead>
+                <tr><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td><td>Saturday</td><td>Sunday</td></tr>
+            </thead>
+            <tbody>        
                 {currentSchedule.matrix.map((row, i) => (
                     <tr key={i}>
-                        <td style={{width: "13%"}}>{getRowTime(i)}</td>
                     {row.map((col, j) => (
                         <td
-                         key={j}                                 
-                         onMouseDown={(e) => { toggleBrush(i, j);
+                         key={j}
+                         onContextMenu={(e) => e.preventDefault()}                             
+                         onMouseDown={(e) => { 
+                            e.preventDefault();
+                            toggleBrush(e.button, i, j);
                             if (!e) e = window.event;
                             e.cancelBubble = true;
                             if (e.stopPropagation) e.stopPropagation();
                         }}
                         onMouseOver={(e) => whenBrushHovers(i, j)}
-                        onMouseUp={(e) => toggleBrush(i, j)}
+                        onMouseUp={(e) => toggleBrush(e.button, i, j)}
                         style={{ backgroundColor: col === 0 ? 'gray' : findTaskById(col)?.color }} >
                             <div
                                 onDrop={(e) => {
@@ -128,6 +165,7 @@ const WeekTable = ({tasks, currentSchedule, updateSchedule, brush, isPainting, s
                 ))}
             </tbody>
         </table>
+        </div>
     );
 };
 

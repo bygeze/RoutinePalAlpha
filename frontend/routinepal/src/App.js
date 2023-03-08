@@ -9,12 +9,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  const [matrix, setMatrix] = useState([]);
   const [brush, setBrush] = useState({name: ""});
   const [isPainting, setIsPainting] = useState(false);
 
   const [isLoading, setLoading] = useState(true);
-  
   
   const [currentSchedule, setCurrentSchedule] = useState([]);
   const [allSchedules, setAllSchedules] = useState([]);
@@ -39,34 +37,30 @@ function App() {
     setTasks(updatedTasks);
   }
 
-  const fetchMatrix = () => {
-    let matrix = Storage.fetchMatrix();
-    return matrix;
-  }
-
   const fetchSchedules = () => {
     let schedules = Storage.fetchSchedules();
     return schedules;
   }
 
-  const updateMatrix = (m) => {
-    Storage.updateMatrix(m);
-    setMatrix(fetchMatrix());
-  }
-
   const updateSchedule = (sch) => {
     Storage.updateSchedule(sch);
+    setCurrentSchedule(sch);
+  }
+
+  const createSchedule = (startTime, endTime, interval, name) => {
+    Storage.createSchedule(startTime, endTime, interval, name);
+    setAllSchedules(Storage.fetchSchedules());
   }
 
   const changeCurrentSchedule = (id) => {
+    setAllSchedules(Storage.fetchSchedules());
     setCurrentSchedule(allSchedules.find(s => s.id == id));
+    
   }
 
   useEffect(() => {
     if( Storage.init() ) {
       console.info("LocalStorage is working just fine.");
-
-      // setTest Task
 
       let fetchedTasks = Storage.fetchAllTasks();
 
@@ -83,7 +77,6 @@ function App() {
       setAllSchedules(fetchedSchedules);
       setCurrentSchedule(current);
 
-
       setLoading(false);
 
     } else {
@@ -97,7 +90,14 @@ function App() {
     <div className="AppContainer">
       <div className="Column1">
       {
-          isLoading ? ("Loading") : (                <SchedulesTable allSchedules={allSchedules} currentScheduleId={currentSchedule.id} changeCurrentSchedule={changeCurrentSchedule}></SchedulesTable>)
+          isLoading ? ("Loading") : (                
+          <SchedulesTable 
+            allSchedules={allSchedules} 
+            currentScheduleId={currentSchedule.id} 
+            changeCurrentSchedule={changeCurrentSchedule}
+            createSchedule={createSchedule}>
+              
+            </SchedulesTable>)
         }
 
       </div>
