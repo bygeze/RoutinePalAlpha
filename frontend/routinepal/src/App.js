@@ -2,9 +2,7 @@
 import './App.css';
 import { useEffect, useState } from "react";
 import Storage from "./storage/Storage";
-import TasksTable from './tasks/TasksTable'
-import WeekTable from './weekvisualizer/WeekTable'
-import SchedulesTable from './matrixes/SchedulesTable'
+import ScheduleView from "./views/ScheduleView"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -86,37 +84,24 @@ function App() {
   }, []);
 
   return (
-  <div className="wrapper">
-    <div className="AppContainer">
-      <div className="Column1">
-      {
-          isLoading ? ("Loading") : (                
-          <SchedulesTable 
-            allSchedules={allSchedules} 
-            currentScheduleId={currentSchedule.id} 
-            changeCurrentSchedule={changeCurrentSchedule}
-            createSchedule={createSchedule}>
-              
-            </SchedulesTable>)
-        }
-
-      </div>
-      <div className="Column2">
-        {
-          isLoading ? ("Loading") : (        <WeekTable tasks={tasks} currentSchedule={currentSchedule} updateSchedule={updateSchedule} brush={brush} isPainting={isPainting} setIsPainting={setIsPainting
-          }></WeekTable>)
-        }
-
-      </div>
-      <div className="Column3">
-        <TasksTable tasks={tasks} addTask={addTask} updateTask={updateTask} deleteTask={deleteTask} brush={brush} setBrush={setBrush}  >
-
-        </TasksTable>
-      </div>
+    <div>
+          <ScheduleView
+          isLoading={isLoading}
+          createSchedule={createSchedule}
+          allSchedules={allSchedules}
+          currentSchedule={currentSchedule}
+          changeCurrentSchedule={changeCurrentSchedule}
+          tasks={tasks}
+          updateSchedule={updateSchedule}
+          brush={brush}
+          isPainting={isPainting}
+          setIsPainting={setIsPainting}
+          addTask={addTask}
+          updateTask={updateTask}
+          deleteTask={deleteTask}
+          setBrush={setBrush}
+          ></ScheduleView>
     </div>
-  </div>
-
-
   );
 }
 
