@@ -1,11 +1,16 @@
 //import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from "react";
+import {
+  useNavigate,
+    } from "react-router-dom";
 import Storage from "./storage/Storage";
 import ScheduleView from "./views/ScheduleView"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+function Main(props) {
+  const navigate = useNavigate();
+
   const [tasks, setTasks] = useState([]);
   const [brush, setBrush] = useState({name: ""});
   const [isPainting, setIsPainting] = useState(false);
@@ -57,6 +62,12 @@ function App() {
   }
 
   useEffect(() => {
+    // checks log in
+    if(!props.isLoggedIn) {
+      navigate("/login")
+    }
+
+    console.log(props.isLoggedIn);
     if( Storage.init() ) {
       console.info("LocalStorage is working just fine.");
 
@@ -84,7 +95,8 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="wrapper">
+      {props.isLoggedIn ? (
           <ScheduleView
           isLoading={isLoading}
           createSchedule={createSchedule}
@@ -101,11 +113,15 @@ function App() {
           deleteTask={deleteTask}
           setBrush={setBrush}
           ></ScheduleView>
+      ) : (
+        
+        <button onClick={() => window.location.href='/login'}>Login Main</button>
+      )}
     </div>
   );
 }
 
-export default App;
+export default Main;
 
 /*
   <div className="wrapper">

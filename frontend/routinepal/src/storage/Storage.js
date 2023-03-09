@@ -14,7 +14,7 @@ class Storage {
 
         // gets tasks
         if(FLAG_TEST_RESET) {
-            localStorage.setItem('tasks', JSON.stringify([{ id: 1, name: "empty", duration: 0, repetition: 1, color: "#FAFAFA" }, { id: 2, name: "default", duration: 0, repetition: 1, color: "#EAFB21" }]));
+            localStorage.setItem('tasks', JSON.stringify([{ id: generateTaskId(), name: "empty", duration: 0, repetition: 1, color: "#FAFAFA" }, { id: generateTaskId(), name: "default", duration: 0, repetition: 1, color: "#EAFB21" }]));
         } else {
             let tasks = localStorage.getItem('tasks');
             if (tasks === undefined || tasks === "undefined" || tasks === null)  {
@@ -24,13 +24,13 @@ class Storage {
         }
 
         // get task id counter
-        if(!FLAG_TEST_RESET) {
-            localStorage.setItem("taskIdCounter", 1);
+        if(FLAG_TEST_RESET) {
+            localStorage.setItem("taskIdCounter", 0);
         } else {
             let taskIdCounter = localStorage.getItem('taskIdCounter');
             if (taskIdCounter === undefined || taskIdCounter === "undefined" || taskIdCounter === null) {
                 // checks if  id counter exists, if it doesn't, creates it.
-                localStorage.setItem("taskIdCounter", 1);
+                localStorage.setItem("taskIdCounter", 0);
             }
         }
 

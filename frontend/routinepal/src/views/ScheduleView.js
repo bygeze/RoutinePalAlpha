@@ -5,10 +5,7 @@ import SchedulesTable from '.././matrixes/SchedulesTable'
 
 
 const ScheduleView = ({isLoading, createSchedule, allSchedules, currentSchedule, changeCurrentSchedule, tasks, updateSchedule, brush, isPainting, setIsPainting, addTask, updateTask, deleteTask, setBrush}) => {
-    
-    
     return (
-    
         <div className="wrapper">
           <div className="AppContainer">
             <div className="Column1">
